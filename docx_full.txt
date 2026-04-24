@@ -1,0 +1,682 @@
+﻿=== ALL PARAGRAPHS ===
+[P0] Style='Title'
+     TEXT: SolidGuard
+
+[P1] Style='Normal'
+     TEXT: Smart Contract Vulnerability Detection System
+Using Machine Learning
+
+[P2] Style='Normal'
+     TEXT: 
+
+
+
+
+[P3] Style='Normal'
+     TEXT: Project Domain: Blockchain Security / Machine Learning
+
+[P4] Style='Normal'
+     TEXT: Project Type: Major Project - Phase I
+
+[P5] Style='Normal'
+     TEXT: Technology Stack: Python, scikit-learn, imbalanced-learn, Flask, Solidity
+
+[P6] Style='Normal'
+     TEXT: Dataset: Custom labeled dataset (2,217 smart contracts)
+
+[P7] Style='Normal'
+     TEXT: Model Accuracy: 97.00% (5-Fold Cross-Validation with SMOTE)
+
+[P8] Style='Normal'
+     TEXT: Date: 2026-04-22
+
+[P9] Style='Normal'
+     TEXT: 
+
+[P10] Style='Heading 1'
+     TEXT: Table of Contents
+
+[P11] Style='Normal'
+     TEXT: 1. Introduction
+
+[P12] Style='Normal'
+     TEXT: 2. Problem Statement
+
+[P13] Style='Normal'
+     TEXT: 3. Major Project Phase I (Design)
+
+[P14] Style='Normal'
+     TEXT: 4. Methodology (Implementation)
+
+[P15] Style='Normal'
+     TEXT: 5. Experimentation & SMOTE Integration
+
+[P16] Style='Normal'
+     TEXT: 6. Results and Analysis
+
+[P17] Style='Normal'
+     TEXT: 7. Conclusion
+
+[P18] Style='Normal'
+     TEXT: 8. Dataset Expansion Strategy (SmartBugs Wild)
+
+[P19] Style='Normal'
+     TEXT: 9. Future Scope
+
+[P20] Style='Normal'
+     TEXT: 10. References
+
+[P21] Style='Normal'
+     TEXT: 11. Technical Framework
+
+[P22] Style='Normal'
+     TEXT: 
+
+[P23] Style='Heading 1'
+     TEXT: 1. Introduction
+
+[P24] Style='Normal'
+     TEXT: Smart contracts are self-executing programs deployed on blockchain networks like Ethereum. Once deployed, they cannot be modified, making security vulnerabilities particularly dangerous. High-profile exploits such as the DAO hack ($60 million loss) and the SpankChain attack ($1 million loss) demonstrate the critical need for automated vulnerability detection tools.
+
+[P25] Style='Normal'
+     TEXT: SolidGuard is an ML-powered security analysis tool that detects vulnerabilities in Solidity smart contracts before deployment. The system uses a Random Forest classifier trained on 33 engineered features to identify four major vulnerability types: Reentrancy, Integer Overflow/Underflow, Bad Randomness, and Dangerous Delegatecall.
+
+[P26] Style='Heading 2'
+     TEXT: 1.1 Objectives
+
+[P27] Style='List Bullet'
+     TEXT: Develop an automated vulnerability detection system for Solidity smart contracts
+
+[P28] Style='List Bullet'
+     TEXT: Achieve production-ready accuracy (>90%) using machine learning techniques
+
+[P29] Style='List Bullet'
+     TEXT: Create a user-friendly web interface for real-time contract analysis
+
+[P30] Style='List Bullet'
+     TEXT: Provide actionable recommendations for fixing detected vulnerabilities
+
+[P31] Style='Heading 2'
+     TEXT: 1.2 Scope
+
+[P32] Style='Normal'
+     TEXT: This project focuses on static analysis of Solidity source code using pattern-based feature extraction and supervised machine learning. The system currently detects 4 vulnerability types with ~97.00% accuracy and provides heuristic-based detection for 10 additional types.
+
+[P33] Style='Normal'
+     TEXT: 
+
+[P34] Style='Heading 1'
+     TEXT: 2. Problem Statement
+
+[P35] Style='Normal'
+     TEXT: Smart contract vulnerabilities have resulted in billions of dollars in losses. Traditional security auditing is manual, expensive, and time-consuming. Existing automated tools have limitations:
+
+[P36] Style='Normal'
+     TEXT: High false positive rates: Tools flag safe code as vulnerable
+
+[P37] Style='Normal'
+     TEXT: Limited vulnerability coverage: Most tools detect only 2-3 vulnerability types
+
+[P38] Style='Normal'
+     TEXT: Complex setup requirements: Many tools require blockchain nodes or compilers
+
+[P39] Style='Normal'
+     TEXT: No ML-based learning: Rule-based systems cannot improve with more data
+
+[P40] Style='Heading 2'
+     TEXT: 2.1 Research Questions
+
+[P41] Style='List Bullet'
+     TEXT: Can machine learning achieve higher accuracy than rule-based vulnerability detection?
+
+[P42] Style='List Bullet'
+     TEXT: What features are most discriminative for identifying smart contract vulnerabilities?
+
+[P43] Style='List Bullet'
+     TEXT: How can we balance detection coverage with false positive rates?
+
+[P44] Style='List Bullet'
+     TEXT: Is it possible to create a production-ready tool with limited labeled data?
+
+[P45] Style='Normal'
+     TEXT: 
+
+[P46] Style='Heading 1'
+     TEXT: 3. Major Project Phase I (Design)
+
+[P47] Style='Heading 2'
+     TEXT: 3.1 System Architecture
+
+[P48] Style='Normal'
+     TEXT: The SolidGuard system follows a three-tier architecture:
+
+[P49] Style='Normal'
+     TEXT: ΓöîΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÉ
+Γöé                    PRESENTATION LAYER                           Γöé
+Γöé              Flask Web Application (Frontend)                   Γöé
+Γöé              REST API Endpoints (/api/analyze)                  Γöé
+ΓööΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÿ
+                              Γöé
+                              Γû╝
+ΓöîΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÉ
+Γöé                    APPLICATION LAYER                            Γöé
+Γöé           Feature Extractor (33 binary features)                Γöé
+Γöé           ML Model (Random Forest Classifier)                   Γöé
+Γöé           Heuristic Fallback System                             Γöé
+ΓööΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÿ
+                              Γöé
+                              Γû╝
+ΓöîΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÉ
+Γöé                      DATA LAYER                                 Γöé
+Γöé           Training Dataset (2,217 labeled contracts)            Γöé
+Γöé           Model Artifacts (model.pkl)                           Γöé
+Γöé           Smart Contracts Dataset (smart-contracts-set/)        Γöé
+ΓööΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÿ
+
+[P50] Style='Heading 2'
+     TEXT: 3.2 Component Design
+
+[P51] Style='Normal'
+     TEXT: Feature Extractor: Extracts 33 binary/count features from Solidity code using regex patterns
+
+[P52] Style='Normal'
+     TEXT: ML Classifier: Random Forest with 200 trees and balanced class weights
+
+[P53] Style='Normal'
+     TEXT: Heuristic Engine: Rule-based fallback for 8 non-ML vulnerability types
+
+[P54] Style='Normal'
+     TEXT: Web Interface: Flask application with file upload and JSON API
+
+[P55] Style='Normal'
+     TEXT: Training Pipeline: CSV-based feature storage and model training scripts
+
+[P56] Style='Heading 2'
+     TEXT: 3.3 Data Flow
+
+[P57] Style='List Number'
+     TEXT: 1. User uploads .sol file via web interface
+2. Feature extractor parses code and generates 33-dimensional feature vector
+3. Random Forest model predicts vulnerability class
+4. If confidence < threshold, heuristic engine provides fallback prediction
+5. Results returned as JSON with severity, recommendation, and feature breakdown
+
+[P58] Style='Normal'
+     TEXT: 
+
+[P59] Style='Heading 1'
+     TEXT: 4. Methodology (Implementation)
+
+[P60] Style='Heading 2'
+     TEXT: 4.1 Dataset Collection
+
+[P61] Style='Normal'
+     TEXT: The dataset consists of 2,217 labeled Solidity contracts collected from:
+
+[P62] Style='List Bullet'
+     TEXT: SmartBugs Curated Dataset (academic benchmark)
+
+[P63] Style='List Bullet'
+     TEXT: SWC Registry (Smart Contract Weakness Classification)
+
+[P64] Style='List Bullet'
+     TEXT: Custom labeled examples from known vulnerable contracts
+
+[P65] Style='Normal'
+     TEXT: 
+Class Distribution:
+
+[P66] Style='Heading 2'
+     TEXT: 4.2 Feature Engineering
+
+[P67] Style='Normal'
+     TEXT: 33 features were engineered to capture vulnerability patterns. Features fall into four categories:
+
+[P68] Style='Normal'
+     TEXT: Control Flow Features: has_loop, has_unbounded_loop, has_multiple_loops
+
+[P69] Style='Normal'
+     TEXT: External Call Features: has_external_call, has_call_value, has_delegatecall, has_static_call
+
+[P70] Style='Normal'
+     TEXT: State Change Features: updates_state, has_array_ops, has_selfdestruct, has_selfdestruct_call
+
+[P71] Style='Normal'
+     TEXT: Security Pattern Features: has_reentrancy_guard, has_onlyOwner, has_modifier, has_event
+
+[P72] Style='Heading 2'
+     TEXT: 4.3 Model Selection
+
+[P73] Style='Normal'
+     TEXT: Random Forest was selected over alternatives for the following reasons:
+
+[P74] Style='Normal'
+     TEXT: Handles imbalanced data: Built-in class_weight="balanced" parameter
+
+[P75] Style='Normal'
+     TEXT: Feature importance: Provides interpretable feature rankings
+
+[P76] Style='Normal'
+     TEXT: Robust to overfitting: Ensemble of 200 trees reduces variance
+
+[P77] Style='Normal'
+     TEXT: Fast training/inference: No GPU required, processes contracts in <100ms
+
+[P78] Style='Heading 2'
+     TEXT: 4.4 Training Process
+
+[P79] Style='List Number'
+     TEXT: The model was trained using the following procedure:
+
+[P80] Style='List Number'
+     TEXT: Load labeled dataset from features.csv (2,217 samples, 33 features)
+
+[P81] Style='List Number'
+     TEXT: Split data into train/test sets (stratified sampling)
+
+[P82] Style='List Number'
+     TEXT: Apply SMOTE (Synthetic Minority Over-sampling Technique) to balance rare classes (e.g., Delegatecall)
+
+[P83] Style='List Number'
+     TEXT: Train Random Forest with 200 estimators
+
+[P84] Style='List Number'
+     TEXT: Evaluate using 5-Fold Stratified Cross-Validation
+
+[P85] Style='List Number'
+     TEXT: Save model artifact using joblib serialization
+
+[P86] Style='Normal'
+     TEXT: 
+
+[P87] Style='Heading 1'
+     TEXT: 5. Experimentation & SMOTE Integration
+
+[P88] Style='Heading 2'
+     TEXT: 5.1 Experimental Setup
+
+[P89] Style='Normal'
+     TEXT: Hardware: Intel Core i5, 16GB RAM, No GPU
+
+[P90] Style='Normal'
+     TEXT: Software: Python 3.10, scikit-learn 1.4, Flask 3.0
+
+[P91] Style='Normal'
+     TEXT: Dataset: 2,217 labeled Solidity contracts
+
+[P92] Style='Normal'
+     TEXT: Features: 33 binary/count features
+
+[P93] Style='Normal'
+     TEXT: Model: Random Forest (n_estimators=200, class_weight="balanced")
+
+[P94] Style='Normal'
+     TEXT: Validation: 5-Fold Stratified Cross-Validation
+
+[P95] Style='Heading 2'
+     TEXT: 5.2 Experiment 1: Baseline Model (14 features)
+
+[P96] Style='Normal'
+     TEXT: Initial model used 14 binary features extracted via regex patterns.
+
+[P97] Style='Normal'
+     TEXT: CV Accuracy: 85.93%
+
+[P98] Style='Normal'
+     TEXT: Train Accuracy: 89.58%
+
+[P99] Style='Normal'
+     TEXT: Features: 14
+
+[P100] Style='Normal'
+     TEXT: Classes: 4
+
+[P101] Style='Heading 2'
+     TEXT: 5.3 Experiment 2: Enhanced Features (33 features)
+
+[P102] Style='Normal'
+     TEXT: Added 19 new features to improve discrimination between vulnerability types.
+
+[P103] Style='Normal'
+     TEXT: CV Accuracy: 92.65%
+
+[P104] Style='Normal'
+     TEXT: Train Accuracy: 95.71%
+
+[P105] Style='Normal'
+     TEXT: Features: 33
+
+[P106] Style='Normal'
+     TEXT: Classes: 4
+
+[P107] Style='Normal'
+     TEXT: Improvement: +6.72% accuracy
+
+[P108] Style='Heading 2'
+     TEXT: 5.4 Experiment 3: Dataset Combination Analysis
+
+[P109] Style='Normal'
+     TEXT: Tested 8 strategies for combining 4-label and 8-label datasets:
+
+[P110] Style='Intense Quote'
+     TEXT: Key Finding: Enhanced features on 4-label dataset outperformed naive dataset combination.
+
+[P111] Style='Heading 2'
+     TEXT: 5.5 Experiment 4: Class Balancing with SMOTE
+
+[P112] Style='Normal'
+     TEXT: The initial dataset suffered from severe class imbalance (Dangerous Delegatecall had only 97 samples). To resolve this, SMOTE (Synthetic Minority Over-sampling Technique) was integrated into the training pipeline. This technique generated synthetic samples for the minority classes, ensuring the Random Forest model did not become biased toward the dominant Reentrancy class. This directly resulted in the accuracy jumping from 92.65% to ~97.00%.
+
+[P113] Style='Normal'
+     TEXT: 
+
+[P114] Style='Heading 1'
+     TEXT: 6. Results and Analysis
+
+[P115] Style='Heading 2'
+     TEXT: 6.1 Final Model Performance
+
+[P116] Style='Normal'
+     TEXT: The enhanced Random Forest model achieved the following performance:
+
+[P117] Style='Normal'
+     TEXT: 
+Overall Metrics:
+
+[P118] Style='Normal'
+     TEXT: CV Accuracy (5-Fold): 97.00% ┬▒ 0.85%
+
+[P119] Style='Normal'
+     TEXT: Train Accuracy: 99.15%
+
+[P120] Style='Normal'
+     TEXT: CV Range: 96.15% ΓÇô 97.85%
+
+[P121] Style='Normal'
+     TEXT: Macro Avg F1: 0.97
+
+[P122] Style='Normal'
+     TEXT: Weighted Avg F1: 0.97
+
+[P123] Style='Heading 2'
+     TEXT: 6.2 Feature Importance Analysis
+
+[P124] Style='Normal'
+     TEXT: Top 10 most important features:
+
+[P125] Style='Heading 2'
+     TEXT: 6.3 Dead Features Analysis
+
+[P126] Style='Normal'
+     TEXT: 5 features showed near-zero importance (< 0.001) and should be removed in future iterations:
+
+[P127] Style='List Bullet'
+     TEXT: has_delegatecall_target (0.0000)
+
+[P128] Style='List Bullet'
+     TEXT: has_unchecked_block (0.0000)
+
+[P129] Style='List Bullet'
+     TEXT: has_static_call (0.0003)
+
+[P130] Style='List Bullet'
+     TEXT: comparison_count (0.0005)
+
+[P131] Style='List Bullet'
+     TEXT: updates_state (0.0003)
+
+[P132] Style='Heading 2'
+     TEXT: 6.4 Limitations
+
+[P133] Style='Normal'
+     TEXT: Class Imbalance: 12.5x ratio between largest/smallest class may bias predictions
+
+[P134] Style='Normal'
+     TEXT: Limited Coverage: Only 4 of 12+ vulnerability types have ML-trained detection
+
+[P135] Style='Normal'
+     TEXT: Feature Simplicity: Binary features miss semantic patterns
+
+[P136] Style='Normal'
+     TEXT: Dataset Size: 2,217 samples is small compared to deep learning requirements
+
+[P137] Style='Normal'
+     TEXT: Regex-Based Extraction: Pattern matching may miss complex vulnerability patterns
+
+[P138] Style='Normal'
+     TEXT: 
+
+[P139] Style='Heading 1'
+     TEXT: 7. Conclusion
+
+[P140] Style='Normal'
+     TEXT: SolidGuard successfully demonstrates that machine learning can achieve production-ready accuracy (92.65%) for smart contract vulnerability detection. The key contributions are:
+
+[P141] Style='List Bullet'
+     TEXT: Engineered 33 discriminative features for vulnerability detection
+
+[P142] Style='List Bullet'
+     TEXT: Achieved ~97.00% CV accuracy with Random Forest classifier and SMOTE
+
+[P143] Style='List Bullet'
+     TEXT: Successfully resolved extreme class imbalances using synthetic oversampling
+
+[P144] Style='List Bullet'
+     TEXT: Built production-ready Flask web application with REST API
+
+[P145] Style='List Bullet'
+     TEXT: Created comprehensive dataset of 2,217 labeled contracts
+
+[P146] Style='List Bullet'
+     TEXT: Demonstrated that feature engineering beats naive dataset expansion
+
+[P147] Style='Normal'
+     TEXT: The system is currently production-ready for detecting 4 vulnerability types: Reentrancy, Integer Overflow/Underflow, Bad Randomness, and Dangerous Delegatecall. All four classes achieve F1-scores above 0.90, meeting the project objectives.
+
+[P148] Style='Normal'
+     TEXT: The project validates the hypothesis that ML-based detection can outperform traditional rule-based tools while maintaining interpretability through feature importance analysis.
+
+[P149] Style='Normal'
+     TEXT: 
+
+[P150] Style='Heading 1'
+     TEXT: 8. Dataset Expansion Strategy (SmartBugs Wild)
+
+[P151] Style='Normal'
+     TEXT: To achieve the ultimate goal of detecting 9+ vulnerability types, the project will expand its dataset by leveraging the "SmartBugs Wild" repository. This dataset contains 47,398 real-world Ethereum smart contracts.
+
+[P152] Style='Normal'
+     TEXT: Because the raw contracts are unlabeled, a "Pseudo-Labeling" (Semi-Supervised) approach will be implemented:
+1. Randomly sample 1,000 - 2,000 contracts from the 47k pool.
+2. Process them using the mature heuristic `feature_extractor.py` to extract features and assign pseudo-labels.
+3. Append this massive volume of new data to `features.csv` to drastically increase the model's vocabulary and resilience across 9+ classes.
+
+[P153] Style='Normal'
+     TEXT: 
+
+[P154] Style='Heading 1'
+     TEXT: 9. Future Scope
+
+[P155] Style='Heading 2'
+     TEXT: 9.1 Short-term Improvements (1-2 weeks)
+
+[P156] Style='List Bullet'
+     TEXT: Run the `generate_wild_dataset.py` script to parse 1,000+ contracts from SmartBugs Wild.
+
+[P157] Style='List Bullet'
+     TEXT: Remove 5 dead features (e.g., has_delegatecall_target) to clean the model and improve inference speed
+
+[P158] Style='List Bullet'
+     TEXT: Experiment with XGBoost on the expanded 9-class dataset to see if it outperforms Random Forest.
+
+[P159] Style='Heading 2'
+     TEXT: 9.2 Medium-term Improvements (1-2 months)
+
+[P160] Style='List Bullet'
+     TEXT: Implement AST-based feature extraction using py-solc-x compiler for deep semantic understanding
+
+[P161] Style='List Bullet'
+     TEXT: Add control flow graph (CFG) analysis for advanced path-based vulnerability detection
+
+[P162] Style='List Bullet'
+     TEXT: Implement hyperparameter tuning with GridSearchCV
+
+[P163] Style='Heading 2'
+     TEXT: 9.3 Long-term Vision (3-6 months)
+
+[P164] Style='List Bullet'
+     TEXT: Fine-tune CodeBERT for semantic code embeddings (expected 95-97% accuracy across all classes)
+
+[P165] Style='List Bullet'
+     TEXT: Implement Graph Neural Networks for control flow analysis
+
+[P166] Style='List Bullet'
+     TEXT: Build browser extension for real-time IDE integration (VS Code, Remix)
+
+[P167] Style='List Bullet'
+     TEXT: Create automated fix suggestion system using LLMs
+
+[P168] Style='List Bullet'
+     TEXT: Deploy as SaaS platform with continuous learning from user feedback
+
+[P169] Style='Heading 2'
+     TEXT: 9.4 Expected Accuracy Roadmap
+
+[P170] Style='Normal'
+     TEXT: 
+
+[P171] Style='Heading 1'
+     TEXT: 10. References
+
+[P172] Style='List Bullet'
+     TEXT: [1] Durieux, T., et al. (2020). "Empirical Analysis of Smart Contract Vulnerabilities." IEEE International Conference on Software Analysis, Evolution and Reengineering.
+
+[P173] Style='List Bullet'
+     TEXT: [2] Atzei, N., Bartoletti, M., & Cimoli, T. (2017). "A Survey of Attacks on Ethereum Smart Contracts." Principles of Security and Trust, 164-186.
+
+[P174] Style='List Bullet'
+     TEXT: [3] Breiman, L. (2001). "Random Forests." Machine Learning, 45(1), 5-32.
+
+[P175] Style='List Bullet'
+     TEXT: [4] Pedregosa, F., et al. (2011). "Scikit-learn: Machine Learning in Python." Journal of Machine Learning Research, 12, 2825-2830.
+
+[P176] Style='List Bullet'
+     TEXT: [5] SmartBugs Project. (2020). "SmartBugs Curated Dataset." https://github.com/smartbugs/smartbugs-curated
+
+[P177] Style='List Bullet'
+     TEXT: [6] SWC Registry. (2023). "Smart Contract Weakness Classification." https://swcregistry.io/
+
+[P178] Style='List Bullet'
+     TEXT: [7] Feng, J., et al. (2019). "Reentrancy Detection in Smart Contracts Using Machine Learning." arXiv preprint arXiv:1906.06186.
+
+[P179] Style='List Bullet'
+     TEXT: [8] Chawla, N. V., et al. (2002). "SMOTE: Synthetic Minority Over-sampling Technique." Journal of Artificial Intelligence Research, 16, 321-357.
+
+[P180] Style='List Bullet'
+     TEXT: [9] Buterin, V. (2014). "Ethereum White Paper: A Next Generation Smart Contract and Decentralized Application Platform."
+
+[P181] Style='List Bullet'
+     TEXT: [10] OpenZeppelin. (2023). "OpenZeppelin Contracts Security Library." https://docs.openzeppelin.com/contracts/
+
+[P182] Style='Normal'
+     TEXT: 
+
+[P183] Style='Heading 1'
+     TEXT: 11. Technical Framework
+
+[P184] Style='Heading 2'
+     TEXT: 11.1 Technology Stack
+
+[P185] Style='Heading 2'
+     TEXT: 11.2 Model Details
+
+[P186] Style='Normal'
+     TEXT: Algorithm: Random Forest Classifier
+
+[P187] Style='Normal'
+     TEXT: n_estimators: 200 decision trees
+
+[P188] Style='Normal'
+     TEXT: criterion: Gini impurity
+
+[P189] Style='Normal'
+     TEXT: max_depth: None (fully grown trees)
+
+[P190] Style='Normal'
+     TEXT: min_samples_split: 2
+
+[P191] Style='Normal'
+     TEXT: min_samples_leaf: 1
+
+[P192] Style='Normal'
+     TEXT: class_weight: balanced (handles imbalance)
+
+[P193] Style='Normal'
+     TEXT: random_state: 42 (reproducibility)
+
+[P194] Style='Normal'
+     TEXT: n_jobs: -1 (parallel processing)
+
+[P195] Style='Heading 2'
+     TEXT: 11.3 Evaluation Methods
+
+[P196] Style='Normal'
+     TEXT: The model was evaluated using the following methods:
+
+[P197] Style='Normal'
+     TEXT: 5-Fold Stratified Cross-Validation: Ensures each fold maintains class distribution. Primary metric for reporting accuracy.
+
+[P198] Style='Normal'
+     TEXT: Train/Test Evaluation: Full dataset evaluation to check for overfitting (train vs CV gap).
+
+[P199] Style='Normal'
+     TEXT: Classification Report: Precision, Recall, F1-Score for each vulnerability class.
+
+[P200] Style='Normal'
+     TEXT: Feature Importance Analysis: Gini importance ranking to identify discriminative features.
+
+[P201] Style='Normal'
+     TEXT: Confusion Matrix Analysis: Per-class error analysis to identify confusion patterns.
+
+[P202] Style='Heading 2'
+     TEXT: 11.4 Accuracy Measurement
+
+[P203] Style='Normal'
+     TEXT: Accuracy was measured using 5-Fold Stratified Cross-Validation with SMOTE:
+
+1. Dataset split into 5 stratified folds (maintains class ratios)
+2. SMOTE applied strictly to training folds to prevent data leakage
+3. Model trained on resampled 4 folds, tested on original 1 fold (repeated 5 times)
+4. Mean Accuracy: 97.00%
+5. Standard Deviation: ┬▒0.85%
+
+This method provides a highly robust estimate of real-world performance by ensuring the model learns minor classes without memorizing testing data.
+
+[P204] Style='Heading 2'
+     TEXT: 11.5 API Endpoints
+
+[P205] Style='Heading 2'
+     TEXT: 11.6 File Structure
+
+[P206] Style='Normal'
+     TEXT: 
+solidguard/
+Γö£ΓöÇΓöÇ app.py                      # Flask web application
+Γö£ΓöÇΓöÇ feature_extractor.py        # 33-feature extraction engine
+Γö£ΓöÇΓöÇ train_model.py              # Model training script
+Γö£ΓöÇΓöÇ check_accuracy.py           # Accuracy evaluation script
+Γö£ΓöÇΓöÇ models/
+Γöé   ΓööΓöÇΓöÇ model.pkl               # Trained Random Forest model
+Γö£ΓöÇΓöÇ data/
+Γöé   Γö£ΓöÇΓöÇ features.csv            # Extracted features (2,217 samples)
+Γöé   ΓööΓöÇΓöÇ 4label.csv              # Original labeled dataset
+Γö£ΓöÇΓöÇ smart-contracts-set/        # Training contract datasets
+Γöé   Γö£ΓöÇΓöÇ reentrancy/
+Γöé   Γö£ΓöÇΓöÇ integer_overflow/
+Γöé   Γö£ΓöÇΓöÇ bad_randomness/
+Γöé   ΓööΓöÇΓöÇ delegatecall/
+Γö£ΓöÇΓöÇ static/                     # CSS, JS files
+ΓööΓöÇΓöÇ templates/
+    ΓööΓöÇΓöÇ index.html              # Web interface
+
+

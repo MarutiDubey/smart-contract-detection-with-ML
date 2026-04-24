@@ -1,0 +1,61 @@
+﻿=== TABLES ===
+--- Table 0: 5 rows x 3 cols ---
+  Row 0: ['Vulnerability Type', 'Samples', 'Percentage']
+  Row 1: ['Reentrancy', '1,218', '54.9%']
+  Row 2: ['Integer Overflow/Underflow', '590', '26.6%']
+  Row 3: ['Bad Randomness', '312', '14.1%']
+  Row 4: ['Dangerous Delegatecall', '97', '4.4%']
+
+--- Table 1: 8 rows x 2 cols ---
+  Row 0: ['4-label baseline', '85.93%']
+  Row 1: ['8-label only', '51.41%']
+  Row 2: ['Naive combine (4+8)', '51.57%']
+  Row 3: ['Combined + Deduplication', '77.38%']
+  Row 4: ['Enhanced Features (4-label)', '92.65%']
+  Row 5: ['Enhanced + Combined', '92.86%']
+  Row 6: ['XGBoost on 4-label', '86.69%']
+  Row 7: ['', '']
+
+--- Table 2: 5 rows x 5 cols ---
+  Row 0: ['Class', 'Precision', 'Recall', 'F1-Score', 'Support']
+  Row 1: ['Reentrancy', '0.98', '0.97', '0.98', '1,218']
+  Row 2: ['Integer Overflow', '0.95', '0.94', '0.94', '590']
+  Row 3: ['Bad Randomness', '0.97', '1.00', '0.98', '312']
+  Row 4: ['Dangerous Delegatecall', '0.99', '0.99', '0.99', '97 (Resampled)']
+
+--- Table 3: 11 rows x 3 cols ---
+  Row 0: ['Feature', 'Importance', 'Description']
+  Row 1: ['has_block_dependency', '0.1811', 'Block timestamp/number usage']
+  Row 2: ['has_arithmetic', '0.1320', 'Arithmetic operations present']
+  Row 3: ['has_external_call', '0.1071', 'External call patterns']
+  Row 4: ['has_overflow_risk', '0.0884', 'Unsafe arithmetic operations']
+  Row 5: ['has_call_value', '0.0590', '.call.value() legacy pattern']
+  Row 6: ['is_payable', '0.0403', 'Payable function modifier']
+  Row 7: ['has_event', '0.0383', 'Event emission']
+  Row 8: ['has_multiple_events', '0.0378', 'Multiple events emitted']
+  Row 9: ['has_msg_value', '0.0330', 'msg.value usage']
+  Row 10: ['has_delegatecall', '0.0322', 'Delegatecall usage']
+
+--- Table 4: 6 rows x 2 cols ---
+  Row 0: ['Baseline (Random Forest, 14 features)', '85.93%']
+  Row 1: ['Enhanced (Random Forest, 33 features)', '92.65%']
+  Row 2: ['Current (SMOTE Integration)', '97.00%']
+  Row 3: ['+ SmartBugs Wild dataset (9+ classes)', 'Maintains ~95% across more classes']
+  Row 4: ['+ CodeBERT fine-tuning', '98%+']
+  Row 5: ['', '']
+
+--- Table 5: 7 rows x 2 cols ---
+  Row 0: ['Programming Language', 'Python 3.10']
+  Row 1: ['ML Library', 'scikit-learn 1.4']
+  Row 2: ['Web Framework', 'Flask 3.0']
+  Row 3: ['Model Serialization', 'joblib']
+  Row 4: ['Data Processing', 'pandas, numpy']
+  Row 5: ['Feature Extraction', 'Regular Expressions (regex)']
+  Row 6: ['Build Tool', 'pip, virtualenv']
+
+--- Table 6: 4 rows x 3 cols ---
+  Row 0: ['Endpoint', 'Method', 'Description']
+  Row 1: ['/', 'GET', 'Web interface (HTML)']
+  Row 2: ['/api/analyze', 'POST', 'Upload .sol file, returns JSON analysis']
+  Row 3: ['/api/info', 'GET', 'Returns model metadata and supported classes']
+

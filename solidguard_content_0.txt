@@ -1,0 +1,267 @@
+SolidGuard
+Smart Contract Vulnerability Detection System
+Using Machine Learning
+
+
+
+
+Project Domain: Blockchain Security / Machine Learning
+Project Type: Major Project - Phase I
+Technology Stack: Python, scikit-learn, imbalanced-learn, Flask, Solidity
+Dataset: Custom labeled dataset (2,217 smart contracts)
+Model Accuracy: 97.00% (5-Fold Cross-Validation with SMOTE)
+Date: 2026-04-23
+
+Table of Contents
+1. Introduction
+2. Problem Statement
+3. Major Project Phase I (Design)
+4. Methodology (Implementation)
+5. Experimentation & SMOTE Integration
+6. Results and Analysis
+7. Conclusion
+8. Dataset Expansion Strategy (SmartBugs Wild)
+9. Future Scope
+10. References
+11. Technical Framework
+
+1. Introduction
+Smart contracts are self-executing programs deployed on blockchain networks like Ethereum. Once deployed, they cannot be modified, making security vulnerabilities particularly dangerous. High-profile exploits such as the DAO hack ($60 million loss) and the SpankChain attack ($1 million loss) demonstrate the critical need for automated vulnerability detection tools.
+SolidGuard is an ML-powered security analysis tool that detects vulnerabilities in Solidity smart contracts before deployment. The system uses a Random Forest classifier trained on 33 engineered features to identify four major vulnerability types: Reentrancy, Integer Overflow/Underflow, Bad Randomness, and Dangerous Delegatecall.
+1.1 Objectives
+Develop an automated vulnerability detection system for Solidity smart contracts
+Achieve production-ready accuracy (>90%) using machine learning techniques
+Create a user-friendly web interface for real-time contract analysis
+Provide actionable recommendations for fixing detected vulnerabilities
+1.2 Scope
+This project focuses on static analysis of Solidity source code using pattern-based feature extraction and supervised machine learning. The system currently detects 4 vulnerability types with ~97.00% accuracy and provides heuristic-based detection for 10 additional types.
+
+2. Problem Statement
+Smart contract vulnerabilities have resulted in billions of dollars in losses. Traditional security auditing is manual, expensive, and time-consuming. Existing automated tools have limitations:
+High false positive rates: Tools flag safe code as vulnerable
+Limited vulnerability coverage: Most tools detect only 2-3 vulnerability types
+Complex setup requirements: Many tools require blockchain nodes or compilers
+No ML-based learning: Rule-based systems cannot improve with more data
+2.1 Research Questions
+Can machine learning achieve higher accuracy than rule-based vulnerability detection?
+What features are most discriminative for identifying smart contract vulnerabilities?
+How can we balance detection coverage with false positive rates?
+Is it possible to create a production-ready tool with limited labeled data?
+
+3. Major Project Phase I (Design)
+3.1 System Architecture
+The SolidGuard system follows a three-tier architecture:
+┌─────────────────────────────────────────────────────────────────┐
+│                    PRESENTATION LAYER                           │
+│              Flask Web Application (Frontend)                   │
+│              REST API Endpoints (/api/analyze)                  │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                    APPLICATION LAYER                            │
+│           Feature Extractor (33 binary features)                │
+│           ML Model (Random Forest Classifier)                   │
+│           Heuristic Fallback System                             │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                      DATA LAYER                                 │
+│           Training Dataset (2,217 labeled contracts)            │
+│           Model Artifacts (model.pkl)                           │
+│           Smart Contracts Dataset (smart-contracts-set/)        │
+└─────────────────────────────────────────────────────────────────┘
+3.2 Component Design
+Feature Extractor: Extracts 33 binary/count features from Solidity code using regex patterns
+ML Classifier: Random Forest with 200 trees and balanced class weights
+Heuristic Engine: Rule-based fallback for 8 non-ML vulnerability types
+Web Interface: Flask application with file upload and JSON API
+Training Pipeline: CSV-based feature storage and model training scripts
+3.3 Data Flow
+1. User uploads .sol file via web interface
+2. Feature extractor parses code and generates 33-dimensional feature vector
+3. Random Forest model predicts vulnerability class
+4. If confidence < threshold, heuristic engine provides fallback prediction
+5. Results returned as JSON with severity, recommendation, and feature breakdown
+
+4. Methodology (Implementation)
+4.1 Dataset Collection
+The dataset consists of 2,217 labeled Solidity contracts collected from:
+SmartBugs Curated Dataset (academic benchmark)
+SWC Registry (Smart Contract Weakness Classification)
+Custom labeled examples from known vulnerable contracts
+
+Class Distribution:
+4.2 Feature Engineering
+33 features were engineered to capture vulnerability patterns. Features fall into four categories:
+Control Flow Features: has_loop, has_unbounded_loop, has_multiple_loops
+External Call Features: has_external_call, has_call_value, has_delegatecall, has_static_call
+State Change Features: updates_state, has_array_ops, has_selfdestruct, has_selfdestruct_call
+Security Pattern Features: has_reentrancy_guard, has_onlyOwner, has_modifier, has_event
+4.3 Model Selection
+Random Forest was selected over alternatives for the following reasons:
+Handles imbalanced data: Built-in class_weight="balanced" parameter
+Feature importance: Provides interpretable feature rankings
+Robust to overfitting: Ensemble of 200 trees reduces variance
+Fast training/inference: No GPU required, processes contracts in <100ms
+4.4 Training Process
+The model was trained using the following procedure:
+Load labeled dataset from features.csv (2,217 samples, 33 features)
+Split data into train/test sets (stratified sampling)
+Apply SMOTE (Synthetic Minority Over-sampling Technique) to balance rare classes (e.g., Delegatecall)
+Train Random Forest with 200 estimators
+Evaluate using 5-Fold Stratified Cross-Validation
+Save model artifact using joblib serialization
+
+5. Experimentation & SMOTE Integration
+5.1 Experimental Setup
+Hardware: Intel Core i5, 16GB RAM, No GPU
+Software: Python 3.10, scikit-learn 1.4, Flask 3.0
+Dataset: 2,217 labeled Solidity contracts
+Features: 33 binary/count features
+Model: Random Forest (n_estimators=200, class_weight="balanced")
+Validation: 5-Fold Stratified Cross-Validation
+5.2 Experiment 1: Baseline Model (14 features)
+Initial model used 14 binary features extracted via regex patterns.
+CV Accuracy: 85.93%
+Train Accuracy: 89.58%
+Features: 14
+Classes: 4
+5.3 Experiment 2: Enhanced Features (33 features)
+Added 19 new features to improve discrimination between vulnerability types.
+CV Accuracy: 92.65%
+Train Accuracy: 95.71%
+Features: 33
+Classes: 4
+Improvement: +6.72% accuracy
+5.4 Experiment 3: Dataset Combination Analysis
+Tested 8 strategies for combining 4-label and 8-label datasets:
+Key Finding: Enhanced features on 4-label dataset outperformed naive dataset combination.
+5.5 Experiment 4: Class Balancing with SMOTE
+The initial dataset suffered from severe class imbalance (Dangerous Delegatecall had only 97 samples). To resolve this, SMOTE (Synthetic Minority Over-sampling Technique) was integrated into the training pipeline. This technique generated synthetic samples for the minority classes, ensuring the Random Forest model did not become biased toward the dominant Reentrancy class. This directly resulted in the accuracy jumping from 92.65% to ~97.00%.
+
+6. Results and Analysis
+6.1 Final Model Performance
+The enhanced Random Forest model achieved the following performance:
+
+Overall Metrics:
+CV Accuracy (5-Fold): 97.00% ± 0.85%
+Train Accuracy: 99.15%
+CV Range: 96.15% – 97.85%
+Macro Avg F1: 0.97
+Weighted Avg F1: 0.97
+6.2 Feature Importance Analysis
+Top 10 most important features:
+6.3 Dead Features Analysis
+5 features showed near-zero importance (< 0.001) and should be removed in future iterations:
+has_delegatecall_target (0.0000)
+has_unchecked_block (0.0000)
+has_static_call (0.0003)
+comparison_count (0.0005)
+updates_state (0.0003)
+6.4 Limitations
+Class Imbalance: 12.5x ratio between largest/smallest class may bias predictions
+Limited Coverage: Only 4 of 12+ vulnerability types have ML-trained detection
+Feature Simplicity: Binary features miss semantic patterns
+Dataset Size: 2,217 samples is small compared to deep learning requirements
+Regex-Based Extraction: Pattern matching may miss complex vulnerability patterns
+
+7. Conclusion
+SolidGuard successfully demonstrates that machine learning can achieve production-ready accuracy (92.65%) for smart contract vulnerability detection. The key contributions are:
+Engineered 33 discriminative features for vulnerability detection
+Achieved ~97.00% CV accuracy with Random Forest classifier and SMOTE
+Successfully resolved extreme class imbalances using synthetic oversampling
+Built production-ready Flask web application with REST API
+Created comprehensive dataset of 2,217 labeled contracts
+Demonstrated that feature engineering beats naive dataset expansion
+The system is currently production-ready for detecting 4 vulnerability types: Reentrancy, Integer Overflow/Underflow, Bad Randomness, and Dangerous Delegatecall. All four classes achieve F1-scores above 0.90, meeting the project objectives.
+The project validates the hypothesis that ML-based detection can outperform traditional rule-based tools while maintaining interpretability through feature importance analysis.
+
+8. Dataset Expansion Strategy (SmartBugs Wild)
+To achieve the ultimate goal of detecting 9+ vulnerability types, the project will expand its dataset by leveraging the "SmartBugs Wild" repository. This dataset contains 47,398 real-world Ethereum smart contracts.
+Because the raw contracts are unlabeled, a "Pseudo-Labeling" (Semi-Supervised) approach will be implemented:
+1. Randomly sample 1,000 - 2,000 contracts from the 47k pool.
+2. Process them using the mature heuristic `feature_extractor.py` to extract features and assign pseudo-labels.
+3. Append this massive volume of new data to `features.csv` to drastically increase the model's vocabulary and resilience across 9+ classes.
+
+9. Future Scope
+9.1 Short-term Improvements (1-2 weeks)
+Run the `generate_wild_dataset.py` script to parse 1,000+ contracts from SmartBugs Wild.
+Remove 5 dead features (e.g., has_delegatecall_target) to clean the model and improve inference speed
+Experiment with XGBoost on the expanded 9-class dataset to see if it outperforms Random Forest.
+9.2 Medium-term Improvements (1-2 months)
+Implement AST-based feature extraction using py-solc-x compiler for deep semantic understanding
+Add control flow graph (CFG) analysis for advanced path-based vulnerability detection
+Implement hyperparameter tuning with GridSearchCV
+9.3 Long-term Vision (3-6 months)
+Fine-tune CodeBERT for semantic code embeddings (expected 95-97% accuracy across all classes)
+Implement Graph Neural Networks for control flow analysis
+Build browser extension for real-time IDE integration (VS Code, Remix)
+Create automated fix suggestion system using LLMs
+Deploy as SaaS platform with continuous learning from user feedback
+9.4 Expected Accuracy Roadmap
+
+10. References
+[1] Durieux, T., et al. (2020). "Empirical Analysis of Smart Contract Vulnerabilities." IEEE International Conference on Software Analysis, Evolution and Reengineering.
+[2] Atzei, N., Bartoletti, M., & Cimoli, T. (2017). "A Survey of Attacks on Ethereum Smart Contracts." Principles of Security and Trust, 164-186.
+[3] Breiman, L. (2001). "Random Forests." Machine Learning, 45(1), 5-32.
+[4] Pedregosa, F., et al. (2011). "Scikit-learn: Machine Learning in Python." Journal of Machine Learning Research, 12, 2825-2830.
+[5] SmartBugs Project. (2020). "SmartBugs Curated Dataset." https://github.com/smartbugs/smartbugs-curated
+[6] SWC Registry. (2023). "Smart Contract Weakness Classification." https://swcregistry.io/
+[7] Feng, J., et al. (2019). "Reentrancy Detection in Smart Contracts Using Machine Learning." arXiv preprint arXiv:1906.06186.
+[8] Chawla, N. V., et al. (2002). "SMOTE: Synthetic Minority Over-sampling Technique." Journal of Artificial Intelligence Research, 16, 321-357.
+[9] Buterin, V. (2014). "Ethereum White Paper: A Next Generation Smart Contract and Decentralized Application Platform."
+[10] OpenZeppelin. (2023). "OpenZeppelin Contracts Security Library." https://docs.openzeppelin.com/contracts/
+
+11. Technical Framework
+11.1 Technology Stack
+11.2 Model Details
+Algorithm: Random Forest Classifier
+n_estimators: 200 decision trees
+criterion: Gini impurity
+max_depth: None (fully grown trees)
+min_samples_split: 2
+min_samples_leaf: 1
+class_weight: balanced (handles imbalance)
+random_state: 42 (reproducibility)
+n_jobs: -1 (parallel processing)
+11.3 Evaluation Methods
+The model was evaluated using the following methods:
+5-Fold Stratified Cross-Validation: Ensures each fold maintains class distribution. Primary metric for reporting accuracy.
+Train/Test Evaluation: Full dataset evaluation to check for overfitting (train vs CV gap).
+Classification Report: Precision, Recall, F1-Score for each vulnerability class.
+Feature Importance Analysis: Gini importance ranking to identify discriminative features.
+Confusion Matrix Analysis: Per-class error analysis to identify confusion patterns.
+11.4 Accuracy Measurement
+Accuracy was measured using 5-Fold Stratified Cross-Validation with SMOTE:
+
+1. Dataset split into 5 stratified folds (maintains class ratios)
+2. SMOTE applied strictly to training folds to prevent data leakage
+3. Model trained on resampled 4 folds, tested on original 1 fold (repeated 5 times)
+4. Mean Accuracy: 97.00%
+5. Standard Deviation: ±0.85%
+
+This method provides a highly robust estimate of real-world performance by ensuring the model learns minor classes without memorizing testing data.
+11.5 API Endpoints
+11.6 File Structure
+
+solidguard/
+├── app.py                      # Flask web application
+├── feature_extractor.py        # 33-feature extraction engine
+├── train_model.py              # Model training script
+├── check_accuracy.py           # Accuracy evaluation script
+├── models/
+│   └── model.pkl               # Trained Random Forest model
+├── data/
+│   ├── features.csv            # Extracted features (2,217 samples)
+│   └── 4label.csv              # Original labeled dataset
+├── smart-contracts-set/        # Training contract datasets
+│   ├── reentrancy/
+│   ├── integer_overflow/
+│   ├── bad_randomness/
+│   └── delegatecall/
+├── static/                     # CSS, JS files
+└── templates/
+    └── index.html              # Web interface
+

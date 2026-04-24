@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(powershell -c \"Get-Content data/4label.csv | Measure-Object -Line; Get-Content data/8label.csv | Measure-Object -Line; Get-Content data/features.csv | Measure-Object -Line\")",
+      "Bash(python *)",
+      "Bash(dir *.py /b)",
+      "Bash(pip install *)",
+      "mcp__ide__executeCode"
+    ]
+  }
+}

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SolidGuard — Smart Contract Vulnerability Scanner</title>
+    <meta name="description" content="AI-powered Solidity smart contract vulnerability detection using Random Forest ML. Upload your .sol file and get instant security analysis.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="bg-grid"></div>
+
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <div class="logo-icon">🛡️</div>
+                <h1>SolidGuard</h1>
+            </div>
+            <p>AI-Powered Smart Contract Vulnerability Scanner</p>
+            <div class="method-badge">
+                <span class="badge-dot"></span>
+                ML Model: Random Forest Classifier &nbsp;·&nbsp; 12 Vulnerability Categories
+            </div>
+        </header>
+
+        <!-- Upload Card -->
+        <div class="card" id="uploadCard">
+            <div class="card-title"><span class="dot"></span> Upload Contract</div>
+
+            <div class="dropzone" id="dropzone">
+                <span class="dropzone-icon">📄</span>
+                <h3>Drop your Solidity file here</h3>
+                <p>or click to browse &nbsp;·&nbsp; <strong>.sol</strong> files only</p>
+                <button class="browse-btn" type="button" onclick="document.getElementById('fileInput').click()">Browse Files</button>
+            </div>
+
+            <input type="file" id="fileInput" class="file-input" accept=".sol">
+
+            <div class="file-info" id="fileInfo">
+                <div class="file-icon">📝</div>
+                <div class="file-details">
+                    <div class="file-name" id="fileName"></div>
+                    <div class="file-size" id="fileSize"></div>
+                </div>
+                <button class="remove-btn" id="removeBtn" title="Remove file">✕</button>
+            </div>
+
+            <!-- Code Preview -->
+            <pre class="code-preview" id="codePreview"></pre>
+
+            <button class="analyze-btn" id="analyzeBtn">
+                <span class="btn-shimmer"></span>
+                🔬 &nbsp;Analyze Contract
+            </button>
+        </div>
+
+        <!-- Scanner Animation -->
+        <div class="card scanner" id="scanner">
+            <div class="scanner-ring"></div>
+            <h3>Scanning contract…</h3>
+            <p id="scanStatus">Extracting features from bytecode patterns</p>
+            <div class="scan-progress">
+                <div class="scan-progress-bar" id="scanProgressBar"></div>
+            </div>
+        </div>
+
+        <!-- Results -->
+        <div class="results" id="results">
+            <div class="card">
+                <div class="card-title"><span class="dot"></span> Scan Results</div>
+
+                <!-- Verdict -->
+                <div class="verdict" id="verdict">
+                    <div class="verdict-icon" id="verdictIcon"></div>
+                    <div class="verdict-text">
+                        <h3 id="verdictTitle"></h3>
+                        <span class="severity-badge" id="severityBadge"></span>
+                        <div class="model-tag" id="modelMethod"></div>
+                    </div>
+                </div>
+
+                <!-- Confidence -->
+                <div class="confidence-section">
+                    <div class="confidence-label">
+                        <span>Model Confidence</span>
+                        <span class="confidence-value" id="confidenceValue">—</span>
+                    </div>
+                    <div class="confidence-bar">
+                        <div class="confidence-bar-fill" id="confidenceBar"></div>
+                    </div>
+                </div>
+
+                <!-- Class Probabilities -->
+                <div class="card-title" style="margin-top:1.5rem"><span class="dot"></span> Probability Breakdown</div>
+                <div class="probabilities" id="probabilities"></div>
+            </div>
+
+            <!-- Features -->
+            <div class="card">
+                <div class="card-title"><span class="dot"></span> Detected Patterns (14 Features)</div>
+                <div class="features-grid" id="featuresGrid"></div>
+            </div>
+
+            <!-- Recommendation -->
+            <div class="card">
+                <div class="card-title"><span class="dot"></span> Recommendation</div>
+                <div class="recommendation" id="recommendation"></div>
+            </div>
+
+            <button class="scan-again-btn" id="scanAgainBtn">↻ &nbsp;Scan Another Contract</button>
+        </div>
+
+        <footer class="footer">
+            SolidGuard v1.0 &nbsp;·&nbsp; Random Forest Classifier &nbsp;·&nbsp; 12 vulnerability categories
+            <br>
+            <span style="font-size:0.72rem;margin-top:4px;display:inline-block">
+                To add more training data: add .sol files to <code>smart-contracts-set/&lt;category&gt;/</code> and retrain
+            </span>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
