@@ -81,16 +81,15 @@ FOLDER_TO_LABEL = {
 # ── Feature extraction ──────────────────────────────────────────────────────
 def extract_features(code: str) -> dict:
     """
-    Return a dict of 28 features extracted from Solidity source code.
+    Return a dict of 33 features extracted from Solidity source code.
     Enhanced features for better vulnerability class separation.
-    Original 14 binary features + 14 active enhanced features.
-    (5 dead features removed after importance analysis.)
+    Original 14 binary features + 19 active enhanced features.
     """
 
     # === ORIGINAL 14 FEATURES ===
-    # 1. External calls: .call(, .transfer(, .send(, call.value(
+    # 1. External calls: .call(, .transfer(, .send(, call.value(, .call{
     has_external_call = int(
-        bool(re.search(r"\.(call|transfer|send)\s*\(", code, re.I))
+        bool(re.search(r"\.(call|transfer|send)\s*[\(\{]", code, re.I))
         or bool(re.search(r"call\.value\s*\(", code, re.I))
     )
 
@@ -119,7 +118,7 @@ def extract_features(code: str) -> dict:
 
     # 9. Unchecked low-level call
     has_unchecked_call = 0
-    call_matches = list(re.finditer(r"\.call\s*[\.\(]", code))
+    call_matches = list(re.finditer(r"\.call\s*[\.\(\{]", code))
     for m in call_matches:
         prefix = code[max(0, m.start() - 80) : m.start()]
         if not re.search(r"(require|assert|if\s*\(|bool\s+\w+\s*=)", prefix, re.I):
@@ -213,6 +212,7 @@ def extract_features(code: str) -> dict:
     return {
         # Original 14 features
         "has_external_call": has_external_call,
+        "updates_state": updates_state,
         "is_payable": is_payable,
         "has_reentrancy_guard": has_reentrancy_guard,
         "has_loop": has_loop,
@@ -227,12 +227,15 @@ def extract_features(code: str) -> dict:
         "has_fallback": has_fallback,
         # Enhanced features (19 new)
         "has_strict_equality": has_strict_equality,
+        "comparison_count": comparison_count,
         "has_balance_check": has_balance_check,
         "has_address_balance": has_address_balance,
         "has_call_value": has_call_value,
+        "has_static_call": has_static_call,
         "has_unbounded_loop": has_unbounded_loop,
         "has_multiple_loops": has_multiple_loops,
         "has_arithmetic": has_arithmetic,
+        "has_unchecked_block": has_unchecked_block,
         "has_onlyOwner": has_onlyOwner,
         "has_modifier": has_modifier,
         "has_event": has_event,
@@ -241,6 +244,7 @@ def extract_features(code: str) -> dict:
         "has_inheritance": has_inheritance,
         "has_interface": has_interface,
         "has_selfdestruct_call": has_selfdestruct_call,
+        "has_delegatecall_target": has_delegatecall_target,
     }
 
 
@@ -257,33 +261,50 @@ def detect_vulnerability(code: str, filename: str) -> int:
 
     # DoS (check first - loops + transfers are a strong signal)
     if re.search(
-        r"(for|while)\s*\([^)]*\)\s*\{[^}]*\.(call|transfer|send)\s*\(",
+        r"(for|while)\s*\([^)]*\)\s*\{[^}]*\.(call|transfer|send)\s*[\(\{]",
         code, re.I | re.S,
     ):
         return LABEL_DOS
-    if re.search(r"(for|while)\s*\([^)]*\.length", code):
+    if re.search(r"(for|while)\s*\([^)]*\.length[^)]*\)\s*\{[^}]*(\.(call|transfer|send)\s*[\(\{]|\[\w+\]\s*=)", code, re.I | re.S):
         return LABEL_DOS
 
     # Dangerous Delegatecall (very specific signal, check early)
     if re.search(r"\.delegatecall\s*\(", code):
         return LABEL_DELEGATECALL
 
-    # Reentrancy
-    # Matches both old .call()(value) AND new Solidity 0.6+ .call{value:x}() syntax
+    # Reentrancy: external call followed by state update within the same function block
     ext_call = re.search(r"\.(call|send|transfer)\s*[.({]", code, re.I)
     if ext_call:
-        after = code[ext_call.end() : ext_call.end() + 400]
+        remaining = code[ext_call.end():]
+        # Restrict check to current enclosing curly block
+        brace_level = 1
+        fn_end = len(remaining)
+        for idx, ch in enumerate(remaining):
+            if ch == '{':
+                brace_level += 1
+            elif ch == '}':
+                brace_level -= 1
+                if brace_level <= 0:
+                    fn_end = idx
+                    break
+        after = remaining[:fn_end]
         if re.search(r"[a-zA-Z_][\w\[\].]*\s*=[^=][^;]*;", after):
             if not re.search(r"(nonReentrant|ReentrancyGuard|mutex|locked)", code, re.I):
                 return LABEL_REENTRANCY
 
     # Unchecked external call (check before overflow to avoid masking)
-    # Also matches new .call{value:}() syntax
     call_matches = list(re.finditer(r"\.call\s*[.({[]", code))
     for m in call_matches:
         prefix = code[max(0, m.start() - 80) : m.start()]
         if not re.search(r"(require|assert|if\s*\(|bool\s+\w+[\s,=]|!\s*\(|\(\s*bool)", prefix, re.I):
             return LABEL_UNCHECKED_CALL
+
+    # Access Control: unprotected owner setting or missing constructor check
+    if re.search(r"function\s+\w*[oO]wner\w*\s*\([^)]*\)\s*public\b", code):
+        return LABEL_ACCESS_CONTROL
+    if re.search(r"function\s+\w+\s*\([^)]*\)\s*public\s*\{[^}]*owner\s*=\s*msg\.sender\s*;", code):
+        if not re.search(r"(onlyOwner|onlyowner|require\s*\(\s*owner\s*==\s*address\(0\))", code):
+            return LABEL_ACCESS_CONTROL
 
     # Integer Overflow (checked AFTER external call checks to prevent false positives)
     if re.search(r"(\+\=|\-\=|\*\=)", code):
@@ -296,9 +317,10 @@ def detect_vulnerability(code: str, filename: str) -> int:
         if re.search(r"(random|winner|lottery|prize|bet)", code, re.I):
             return LABEL_BAD_RANDOMNESS
 
-    # Access Control
-    if re.search(r"function\s+\w*[oO]wner\w*\s*\([^)]*\)\s*public\b", code):
-        return LABEL_ACCESS_CONTROL
+    # Race Condition (Front-running)
+    if re.search(r"function\s+approve\s*\(\s*address\s+\w+\s*,\s*uint\w*\s+\w+\s*\)", code):
+        if not re.search(r"(increaseAllowance|decreaseAllowance)", code):
+            return LABEL_RACE_CONDITION
 
     # Ether Strict Equality (tightened: only flag balance == or != comparisons)
     if re.search(r"\.balance\s*(==|!=)\s*", code):
@@ -315,7 +337,7 @@ def detect_vulnerability(code: str, filename: str) -> int:
                 return LABEL_ETHER_FROZEN
 
     # Variable shadowing
-    if re.search(r"\bshadow", name):
+    if re.search(r"\bshadow", name) or re.search(r"contract\s+\w+\s+is\s+(\w+)[^{]*\{[^}]*address\s+owner\s*;", code):
         return LABEL_VARIABLE_SHADOWING
 
     return LABEL_SAFE
