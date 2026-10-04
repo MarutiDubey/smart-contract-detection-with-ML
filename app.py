@@ -165,8 +165,9 @@ MODEL_METHOD_INFO = {
 model = None
 if os.path.exists(MODEL_PATH):
     try:
+        print(f"[*] Loading Random Forest model from {MODEL_PATH} ...")
         model = joblib.load(MODEL_PATH)
-        print(f"[OK] Model loaded from {MODEL_PATH}")
+        print(f"[OK] Model loaded successfully.")
     except Exception as e:
         print(f"[WARN] Could not load model: {e}")
 else:
