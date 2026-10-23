@@ -63,11 +63,11 @@ MODEL_INFO = {
     "method": "Random Forest Classifier",
     "library": "scikit-learn",
     "n_estimators": 200,
-    "max_depth": 10,
+    "max_depth": 14,
     "class_weight": "balanced",
     "description": (
         "Ensemble of 200 decision trees with balanced class weights. "
-        "Trained on binary features extracted from Solidity source code patterns."
+        "Trained on 33 semantic & syntactic features extracted from Solidity source code patterns."
     ),
 }
 
@@ -76,8 +76,9 @@ def main() -> None:
     parser = argparse.ArgumentParser(
         description="Train multi-class vulnerability detection model."
     )
+    default_feat = "data/features_100k.csv" if os.path.exists("data/features_100k.csv") else "data/features.csv"
     parser.add_argument(
-        "--features", default="data/features.csv", help="Path to features CSV"
+        "--features", default=default_feat, help="Path to features CSV"
     )
     parser.add_argument(
         "--model", default="models/model.pkl", help="Output model file path"

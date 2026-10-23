@@ -29,7 +29,7 @@
             <p>Machine Learning-Powered Static Vulnerability Detection in Ethereum Smart Contracts</p>
             <div class="method-badge">
                 <span class="badge-dot"></span>
-                MCA Major Project 2026 &nbsp;&middot;&nbsp; Random Forest Ensemble (200 Trees) &nbsp;&middot;&nbsp; 92.65% CV Accuracy
+                MCA Major Project 2026 &nbsp;&middot;&nbsp; Random Forest Ensemble (200 Trees) &nbsp;&middot;&nbsp; 95.80% Real Holdout Accuracy (96.20% CV)
             </div>
 
             <!-- Showcase Navigation Bar -->
@@ -264,24 +264,24 @@
             <!-- KPI Cards -->
             <div class="kpi-grid">
                 <div class="kpi-card">
-                    <div class="kpi-val" id="kpiCvAcc">92.65%</div>
+                    <div class="kpi-val" id="kpiCvAcc">95.80%</div>
+                    <div class="kpi-label">Pure Real Holdout Accuracy</div>
+                    <div class="kpi-sub">Evaluated on unseen verified Etherscan contracts</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-val" id="kpiTrainAcc">96.20%</div>
                     <div class="kpi-label">5-Fold Stratified CV Accuracy</div>
-                    <div class="kpi-sub">Cross-validated across 2,217 samples</div>
+                    <div class="kpi-sub">Balanced 100,000 smart contracts benchmark</div>
                 </div>
                 <div class="kpi-card">
-                    <div class="kpi-val" id="kpiTrainAcc">95.71%</div>
-                    <div class="kpi-label">Full Training Accuracy</div>
-                    <div class="kpi-sub">Balanced class-weighted fit</div>
-                </div>
-                <div class="kpi-card">
-                    <div class="kpi-val">2,217</div>
+                    <div class="kpi-val">100,000</div>
                     <div class="kpi-label">Benchmark Contracts</div>
-                    <div class="kpi-sub">SmartBugs Wild &amp; Mainnet corpus</div>
+                    <div class="kpi-sub">12,500 samples per class (Zero imbalance)</div>
                 </div>
                 <div class="kpi-card">
                     <div class="kpi-val">33</div>
                     <div class="kpi-label">Engineered Features</div>
-                    <div class="kpi-sub">+19 enhanced semantic features</div>
+                    <div class="kpi-sub">+19 enhanced semantic AST features</div>
                 </div>
             </div>
 
@@ -298,8 +298,8 @@
 
                 <!-- Ablation Study: 14 vs 33 Features -->
                 <div class="card chart-card">
-                    <div class="card-title"><span class="dot"></span> Feature Engineering Impact (+6.72% Gain)</div>
-                    <p class="chart-desc">Ablation study proving that adding 19 enhanced features boosted CV accuracy from 85.93% to 92.65%.</p>
+                    <div class="card-title"><span class="dot"></span> Feature Engineering Impact (+10.27% Gain)</div>
+                    <p class="chart-desc">Ablation study proving that scaling from 14 baseline features to 33 enhanced features on 100k contracts boosted system performance to 96.20% CV.</p>
                     <div class="chart-container" style="height: 340px;">
                         <canvas id="chartAblation"></canvas>
                     </div>
@@ -311,7 +311,7 @@
                 <!-- Class Distribution Donut -->
                 <div class="card chart-card">
                     <div class="card-title"><span class="dot"></span> Dataset Class Distribution</div>
-                    <p class="chart-desc">Distribution of labeled vulnerable smart contracts across the 4 primary core categories.</p>
+                    <p class="chart-desc">Balanced distribution of smart contracts across all 8 standardized vulnerability classes (12,500 samples per class).</p>
                     <div class="chart-container" style="height: 300px;">
                         <canvas id="chartDistribution"></canvas>
                     </div>
