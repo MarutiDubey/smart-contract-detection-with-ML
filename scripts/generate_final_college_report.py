@@ -1,3 +1,9 @@
+import os, sys
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if BASE_DIR not in sys.path:
+    sys.path.insert(0, BASE_DIR)
+os.chdir(BASE_DIR)
+
 """
 Complete College Project Implementation Report Generator for SolidGuard
 Strictly adhering to IIIT Bhopal MCA Project Implementation Template 2026 (MCA-4004).

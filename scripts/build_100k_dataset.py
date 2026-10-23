@@ -1,3 +1,9 @@
+import os, sys
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if BASE_DIR not in sys.path:
+    sys.path.insert(0, BASE_DIR)
+os.chdir(BASE_DIR)
+
 """
 SolidGuard - 100,000 Scale Dataset Synthesizer and Preprocessing Engine
 Combines Real-World Verified Contracts (from 8label.csv and Slither benchmark)

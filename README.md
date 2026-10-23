@@ -267,54 +267,66 @@ mindmap
 ```
 smart-contract-detection-with-ML/
 |
-|-- app.py                        # Flask web server + REST API (3 routes)
-|-- feature_extractor.py          # 33-feature regex extractor + heuristic fallback
-|-- train_model.py                # Model training script (RF / XGB / SVM / KNN)
-|-- train_from_csv.py             # Train directly from pre-built CSV
-|-- check_accuracy.py             # Evaluate model accuracy metrics
-|-- test_combined.py              # Heuristic unit tests (6 cases)
-|-- test_combined_advanced.py     # 8-strategy dataset combination analysis
+|-- app.py                        # Flask web application & REST API
+|-- feature_extractor.py          # Core 33-feature static regex analysis engine
+|-- train_model.py                # Primary model training script (RF / XGB / SVM / KNN)
 |-- requirements.txt              # Python dependencies
+|-- README.md                     # Comprehensive project documentation
+|-- .gitignore                    # Git ignore rules
 |
-|-- smart-contracts-set/          # Labeled Solidity training dataset
-|   |-- reentrancy/               # Label 1 - Reentrancy contracts
-|   |-- denial_of_service/        # Label 2 - DoS contracts
-|   |-- integer_overflow/         # Label 3 - Overflow contracts
-|   |-- unprotected_function/     # Label 4 - Access control (type A)
-|   |-- wrong_constructor_name/   # Label 4 - Access control (type B)
-|   |-- unchecked_external_call/  # Label 5 - Unchecked call
-|   |-- bad_randomness/           # Label 6 - Bad randomness
-|   |-- race_condition/           # Label 7 - Front-running
-|   |-- honeypots/                # Label 8 - Honeypot traps
-|   |-- forced_ether_reception/   # Label 9 - Forced ETH
-|   |-- incorrect_interface/      # Label 10 - Interface mismatch
-|   |-- variable_shadowing/       # Label 11 - Variable shadowing
-|   `-- safe/                     # Label 0 - Clean contracts
+|-- reports/                      # Formal MCA Project Reports & Templates
+|   |-- SolidGuard_MCA_Project_Report_2026_Updated.docx   # ★ Final 36-Page Project Report
+|   |-- SolidGuard_MCA_Project_Report_2026.docx           # Synchronized Master Report
+|   |-- 5 Project Report.docx                             # College Submission Copy
+|   |-- MCA Project Implementation template 2026 (1).docx # Institutional Template
+|   |-- SolidGuard_MCA_Project_Report_Template.docx       # Department Formatting Template
+|   |-- SolidGuard_Project_Report.docx                    # Original Baseline Report
+|   |-- Vulnerability Detection in Smart Contracts slidguard.docx # Reference Report
+|   `-- README.md                 # Summary index of project reports
 |
-|-- data/
-|   |-- features.csv              # Extracted feature matrix (4-label, ~2217 rows)
-|   |-- features_8label.csv       # Extended 8-label feature matrix
+|-- docs/                         # Technical Documentation & Viva Guides
+|   |-- VIVA_DEFENSE_AND_PROOFS.md# Viva Defense Questions, Answers & Proofs
+|   |-- ACCURACY_IMPROVEMENT_REPORT.md # 85.93% to 95.80% Evolution Analysis
+|   |-- accuracy_analysis.md      # Multi-Strategy Comparison Report
+|   |-- final_report.md           # Comprehensive Project Development Report
+|   |-- problem_and_solution.md   # Problem Statement & Dual-Tier Solution
+|   |-- project_review.md         # Technical Review & Feature Matrix
+|   `-- README.md                 # Documentation Index
+|
+|-- scripts/                      # Training, Pipelines, Benchmarks & Generators
+|   |-- build_100k_dataset.py     # 100K Balanced Benchmark Dataset Builder
+|   |-- build_100k_pipeline.py    # 100K Training, CV & Holdout Validation Pipeline
+|   |-- check_accuracy.py         # Evaluate Model Accuracy & Feature Importances
+|   |-- train_from_csv.py         # Train Classifier Directly from Pre-Built CSV
+|   |-- test_combined.py          # Heuristic Fallback Unit Tests
+|   |-- test_combined_advanced.py # Advanced Multi-Strategy Verification Tests
+|   |-- generate_all_publication_figures.py # Matplotlib Figure Generator
+|   |-- generate_final_college_report.py    # College Report Generator Script
+|   |-- generate_docx.py          # Word Document Builder
+|   `-- docx_report_helpers.py    # Word Table & Typography Styling Library
+|
+|-- data/                         # Benchmark Datasets & Feature Matrices
 |   |-- 4label.csv                # Raw 4-label contract dataset
-|   `-- 8label.csv                # Raw 8-label contract dataset
+|   |-- 8label.csv                # Raw 8-label contract dataset
+|   |-- features.csv              # Extracted feature matrix (4-label, ~2,217 rows)
+|   |-- features_8label.csv       # Extended 8-label feature matrix
+|   |-- features_100k.csv         # 100,000-sample balanced benchmark matrix
+|   `-- real_features_33.csv      # Pure real-world holdout validation features
 |
-|-- models/
-|   |-- model.pkl                 # Active model (92.65% CV accuracy, 33 features)
-|   |-- model_8label.pkl          # Experimental 8-class model
-|   `-- model_backup.pkl          # Backup of original 14-feature model
+|-- models/                       # Trained Serialized Machine Learning Models
+|   |-- model.pkl                 # Active Production Random Forest Model
+|   |-- model_100k.pkl            # 100K Balanced Benchmark Model (95.80% Holdout)
+|   |-- model_8label.pkl          # 8-Class Baseline Model
+|   `-- model_backup.pkl          # Backup of Original 14-Feature Model
 |
 |-- templates/
-|   `-- index.html                # Jinja2 web frontend template
+|   `-- index.html                # Dark-themed Web Dashboard Template
 |
 |-- static/
-|   |-- css/
-|   |   `-- style.css             # Dark-theme UI styles
-|   `-- js/
-|       `-- app.js                # Frontend logic - drag/drop, API calls, charts
+|   |-- css/style.css             # Cyber-Security UI Styling
+|   `-- js/app.js                 # Drag & Drop, Scan API Calls, Charts & Diffs
 |
-|-- ACCURACY_IMPROVEMENT_REPORT.md  # 85.93% to 92.65% improvement analysis
-|-- final_report.md                 # Full session-by-session project report
-|-- accuracy_analysis.md            # Strategy comparison (8 approaches tested)
-`-- problem_and_solution.md         # Technical problem statement and solutions
+`-- smart-contracts-set/          # Sample Solidity Contracts for Live Auditing
 ```
 
 ---
