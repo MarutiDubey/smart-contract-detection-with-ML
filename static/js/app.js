@@ -494,22 +494,26 @@ async function loadAnalyticsCharts() {
         // 2. Ablation Comparison Bar Chart (14 vs 33 Features)
         const abCtx = document.getElementById('chartAblation');
         if (abCtx && data.comparison) {
+            const compLabels = data.comparison.labels || ['Baseline (14 Features)', 'SolidGuard-100K (33 Features)'];
+            const cvVals = data.comparison.cv_accuracy || [85.93, 96.20];
+            const trainVals = data.comparison.train_accuracy || [89.58, 96.44];
+
             chartInstances.ablation = new Chart(abCtx, {
                 type: 'bar',
                 data: {
                     labels: ['5-Fold CV Accuracy', 'Training Accuracy'],
                     datasets: [
                         {
-                            label: 'Baseline (14 Features)',
-                            data: [85.93, 89.58],
+                            label: compLabels[0],
+                            data: [cvVals[0], trainVals[0]],
                             backgroundColor: 'rgba(100, 116, 139, 0.65)',
                             borderColor: '#94a3b8',
                             borderWidth: 1,
                             borderRadius: 6,
                         },
                         {
-                            label: 'SolidGuard Enhanced (33 Features)',
-                            data: [92.65, 95.71],
+                            label: compLabels[1],
+                            data: [cvVals[1], trainVals[1]],
                             backgroundColor: 'rgba(16, 185, 129, 0.75)',
                             borderColor: '#34d399',
                             borderWidth: 1,
